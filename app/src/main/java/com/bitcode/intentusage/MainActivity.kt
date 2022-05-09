@@ -1,17 +1,27 @@
 package com.bitcode.intentusage
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
+import android.widget.Toast
 import com.bitcode.intentusage.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
+    var br = DemoBR()
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        registerReceiver(
+            br,
+            IntentFilter("in.bitcode.download.COMPLETE")
+        )
+
         super.onCreate(savedInstanceState)
         StrictMode.setVmPolicy(
             StrictMode.VmPolicy.Builder().build()
@@ -104,6 +114,20 @@ class MainActivity : AppCompatActivity() {
             )
 
         }
+
+        binding.btnRegisterUpdateReceiver.setOnClickListener {
+            var br = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    Toast.makeText(this@MainActivity, intent!!.action, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            registerReceiver(
+                br,
+                IntentFilter("in.bitcode.app.UPDATED")
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,5 +137,10 @@ class MainActivity : AppCompatActivity() {
             Log.e("tag", data.data.toString())
         }
 
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(br)
+        super.onDestroy()
     }
 }

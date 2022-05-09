@@ -61,6 +61,12 @@
         android:text="Pick Image"
         android:id="@+id/btnPickImage" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register Update Broadcast Receiver"
+        android:id="@+id/btnRegisterUpdateReceiver" />
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="wrap_content"
